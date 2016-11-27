@@ -1,3 +1,7 @@
+// 2016
+// Автор: Гусев Илья
+// Описание: Точка входа в приложение.
+
 #include <OverlappedWindow.h>
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
@@ -9,10 +13,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	wnd.Show( nCmdShow );
 
 	MSG msg;
-	HACCEL hAccel;
-	hAccel = LoadAccelerators( hInstance, MAKEINTRESOURCE( IDR_ACCELERATOR1 ) );
+	HACCEL hAccel = LoadAccelerators( hInstance, MAKEINTRESOURCE( IDR_ACCELERATOR1 ) );
 	while( GetMessage( &msg, NULL, 0, 0 ) ) {
-		if (TranslateAccelerator( wnd.handle, hAccel, &msg ) == 0 ) { 
+		if (TranslateAccelerator( wnd.GetHandle(), hAccel, &msg ) == 0 ) { 
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
