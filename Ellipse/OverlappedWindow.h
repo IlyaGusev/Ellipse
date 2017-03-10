@@ -13,12 +13,13 @@
 
 #include <resource.h>
 #include <Ellipse.h>
+#include <Scale.h>
 
 
 // Класс, осуществляющий отрисовку главного окна. Отрисовывает фон, эллипс и текст.
 class COverlappedWindow {
 public:
-	COverlappedWindow() : ellipse( 0, 0, 100, 50, RGB(0, 255, 0) ) {};
+	COverlappedWindow( CDPI& _dpi ) : ellipse( 0, 0, 100, 50, RGB(0, 255, 0) ), dpi(_dpi) {};
 	~COverlappedWindow() {};
 
 	// Регистрация окна.
@@ -29,6 +30,8 @@ public:
 	bool Show( int cmdShow );
 	// Получение хэндла окна.
 	HWND GetHandle() { return handle; }
+	// Задать dpi разрешение.
+	void SetScale( int scale );
 
 private:
 	void onPaint( HDC hdc );
@@ -38,5 +41,8 @@ private:
 
 	HWND handle;
 	CEllipse ellipse;
+	CScale scale;
 	HBITMAP bkBitmap;
+	HBITMAP scaleBitmap;
+	CDPI& dpi;
 };

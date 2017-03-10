@@ -44,6 +44,8 @@ bool COverlappedWindow::Create()
 	SetWindowText( handle, L"Ellipse" );
 	SetLayeredWindowAttributes( handle, 0, 255, LWA_ALPHA );
 	bkBitmap = LoadBitmap( hInstance, MAKEINTRESOURCE(IDB_BITMAP1) );
+	scaleBitmap = LoadBitmap( hInstance, MAKEINTRESOURCE(IDB_BITMAP2) );
+	scale.SetBitmap( scaleBitmap );
 	return true;
 }
 
@@ -51,6 +53,11 @@ bool COverlappedWindow::Show( int cmdShow )
 {
 	ShowWindow( handle, cmdShow );
 	return true;
+}
+
+void COverlappedWindow::SetScale( int scale )
+{
+	this->dpi.SetScale( scale );
 }
 
 // Оконная процедура с обработкой сообщений.
@@ -80,6 +87,12 @@ LRESULT CALLBACK COverlappedWindow::windowProc( HWND hwnd, UINT msg, WPARAM wPar
 			ptr->ellipse.MoveTo( rc.left, rc.top, rc.right, rc.bottom );
 			InvalidateRect( hwnd, NULL, TRUE ); 
 			return 0;
+
+		case WM_DPICHANGED: {
+			ptr->SetScale(LOWORD(wParam));
+			InvalidateRect( hwnd, NULL, TRUE ); 
+			break;
+		}
 
 		case WM_COMMAND: 
 			switch ( LOWORD( wParam ) ) {
@@ -119,6 +132,8 @@ void COverlappedWindow::onPaint( HDC hdc )
 	// Рисуем всё на нём.
 	drawBackground( hdcMem );
 	ellipse.Draw( hdcMem );
+	scale.Draw( hdcMem, dpi, 0, 0, false );
+	scale.Draw( hdcMem, dpi, 0, 200, true );
 	int angle = static_cast<int>( atan( static_cast<double>( rect.bottom-rect.top ) / 
 		( rect.right-rect.left ) ) * 180 / PI * 10 );
 	drawText( hdcMem, rect.left+30, rect.bottom-45, 40, angle );
